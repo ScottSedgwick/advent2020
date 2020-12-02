@@ -15,6 +15,7 @@ tested-with:         GHC == 8.10.1
 
 common common-options
   build-depends:       base ^>= 4.14.0.0
+                     , cond
                      , safe
   
   ghc-options:         -Wall
@@ -35,6 +36,7 @@ library
   exposed-modules:     Advent
   other-modules:       Advent.Day1
                      , Advent.Day2
+                     , Advent.Day3
   ghc-options:         -Wmissing-export-lists
 
 executable advent-exe
@@ -54,6 +56,7 @@ test-suite advent-test
   main-is:             Spec.hs
   other-modules:       AdventSpec.Day1
                      , AdventSpec.Day2
+                     , AdventSpec.Day3
   build-depends:       advent
                      , hspec
   ghc-options:         -threaded
