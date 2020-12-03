@@ -16,6 +16,8 @@ tested-with:         GHC == 8.10.1
 common common-options
   build-depends:       base ^>= 4.14.0.0
                      , cond
+                     , parsec
+                     , mtl
                      , safe
   
   ghc-options:         -Wall
@@ -34,7 +36,8 @@ library
   import:              common-options
   hs-source-dirs:      src
   exposed-modules:     Advent
-  other-modules:       Advent.Day1
+  other-modules:       Advent.ParseUtils
+                     , Advent.Day1
                      , Advent.Day2
                      , Advent.Day3
   ghc-options:         -Wmissing-export-lists
