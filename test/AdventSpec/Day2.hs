@@ -10,7 +10,7 @@ process f fname = do
   epwd <- parseFromFile day2Parser fname
   case epwd of
     Left e -> e `shouldBe` newErrorUnknown (newPos "" 0 0)
-    Right ps -> f ps -- day2ValidCount day2IsValid1 ps `shouldBe` 2
+    Right ps -> f ps 
 
 spec :: Spec
 spec = do

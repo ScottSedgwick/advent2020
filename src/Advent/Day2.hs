@@ -1,4 +1,4 @@
-{-# LANGUAGE DerivingStrategies, FlexibleContexts #-}
+{-# LANGUAGE DerivingStrategies #-}
 module Advent.Day2
   ( Pwd
   , day2IsValid1
@@ -8,10 +8,10 @@ module Advent.Day2
   )
  where
 
-import Data.Algebra.Boolean (xor)
-import Safe (headMay)
-import Text.Parsec
-import Text.Parsec.String (Parser)
+import Data.Algebra.Boolean ( xor )
+import Safe ( headMay )
+import Text.Parsec ( char, digit, letter, newline, space, many ) 
+import Text.Parsec.String ( Parser )
 
 data Pwd = Pwd
   { minC :: Int
@@ -50,7 +50,7 @@ day2IsValid1 p = l >= minC p && l <= maxC p
     l = length (filter (== ch p) (pwd p))
 
 day2IsValid2 :: Pwd -> Bool
-day2IsValid2 p = (a == c `xor` b == c)
+day2IsValid2 p = a == c `xor` b == c
   where
     a = headMay (drop (minC p - 1) (pwd p))
     b = headMay (drop (maxC p - 1) (pwd p))
