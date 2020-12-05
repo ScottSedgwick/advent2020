@@ -19,6 +19,7 @@ common common-options
                      , parsec
                      , mtl
                      , safe
+                     , split
   
   ghc-options:         -Wall
                        -Wcompat
@@ -41,6 +42,7 @@ library
                      , Advent.Day2
                      , Advent.Day3
                      , Advent.Day4
+                     , Advent.Day5
   ghc-options:         -Wmissing-export-lists
 
 executable advent-exe
@@ -62,6 +64,7 @@ test-suite advent-test
                      , AdventSpec.Day2
                      , AdventSpec.Day3
                      , AdventSpec.Day4
+                     , AdventSpec.Day5
   build-depends:       advent
                      , hspec
   ghc-options:         -threaded

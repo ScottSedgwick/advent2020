@@ -1,7 +1,7 @@
-module AdventSpec.Day4 (spec) where
+module AdventSpec.Day5 (spec) where
 
 import Test.Hspec ( describe, it, shouldBe, Spec )
-import Advent ( day4pt1, day4pt2 )
+import Advent 
 
 spec :: Spec
 spec = do
