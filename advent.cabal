@@ -65,6 +65,7 @@ test-suite advent-test
                      , AdventSpec.Day3
                      , AdventSpec.Day4
                      , AdventSpec.Day5
+                     , AdventSpec.Day6
   build-depends:       advent
                      , hspec
   ghc-options:         -threaded
