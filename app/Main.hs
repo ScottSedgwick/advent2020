@@ -3,10 +3,10 @@ module Main (main) where
 import Advent
 
 datafile :: FilePath
-datafile = "data/Day5Actual.txt"
+-- datafile = "data/Day6Test.txt"
+datafile = "data/Day6Actual.txt"
 
 main :: IO ()
 main = do
   xs <- readFile datafile
-  print $ head (day5pt1 xs)
-  print $ day5pt2 xs
+  print $ day6pt2 xs
