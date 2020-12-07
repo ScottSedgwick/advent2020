@@ -4,21 +4,20 @@ module Advent.Day5
   , seatFrom
   ) where
 
-import Data.List (sort)
+import Data.Char (digitToInt)
+import Data.List (foldl', sort)
 
 day5pt1 :: String -> [Int]
-day5pt1 xs = reverse $ sort $ map (getId . seatFrom) (lines xs)
+day5pt1 xs = reverse $ sort $ map seatFrom (lines xs)
 
-getId :: (Int, Int) -> Int
-getId (a,b) = a * 8 + b
+seatFrom :: String -> Int
+seatFrom xs = binToDec (replace 'F' '0' $ replace 'B' '1' $ take 7 xs) * 8 + binToDec (replace 'R' '1' $ replace 'L' '0' $ drop 7 xs)
 
-seatFrom :: String -> (Int, Int)
-seatFrom xs = (binSearch 0 127 (take 7 xs), binSearch 0 7 (drop 7 xs))
+binToDec :: String -> Int
+binToDec = foldl' (\acc x -> acc * 2 + digitToInt x) 0
 
-binSearch :: Int -> Int -> String -> Int
-binSearch minVal maxVal (x:xs) | x `elem` "FL" = binSearch minVal ((maxVal + minVal) `div` 2) xs
-                               | x `elem` "BR" = binSearch (((maxVal + minVal) `div` 2) + 1) maxVal xs
-binSearch minVal _ _ = minVal
+replace :: Eq a => a -> a -> [a] -> [a]
+replace a b = map (\x -> if x == a then b else x)
 
 day5pt2 :: String -> Int
 day5pt2 xs = findGap ys (tail ys)
@@ -26,9 +25,8 @@ day5pt2 xs = findGap ys (tail ys)
     ys = day5pt1 xs
 
 findGap :: [Int] -> [Int] -> Int
-findGap [] _ = -1
-findGap _ [] = -1
 findGap (x:xs) (y:ys) = 
   if x - y == 1 
     then findGap xs ys 
     else x - 1
+findGap _ _ = -1
