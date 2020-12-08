@@ -45,6 +45,7 @@ library
                      , Advent.Day5
                      , Advent.Day6
                      , Advent.Day7
+                     , Advent.Day8
   ghc-options:         -Wmissing-export-lists
 
 executable advent-exe
