@@ -2,10 +2,11 @@
 module Advent.Day7
   ( day7pt1
   , day7pt2
+  , day7parser
   ) where
 
 import Control.Monad (void)
-import Data.List (isInfixOf, nub)
+import Data.List (nub, isInfixOf)
 import Data.List.Split (splitOn)
 import Text.Parsec
 import Text.Parsec.String ( Parser )
@@ -30,16 +31,16 @@ find fromColor colorMap = map fst cs
 hasColor :: String -> (String, String) -> Bool
 hasColor c (_, b) = c `isInfixOf` b
 
-day7pt2 :: String -> Int
-day7pt2 ls = 
-  case parse (many bagParser) "" ls of
-    (Left _)   -> -1
-    (Right ys) -> countBags "shiny gold" ys - 1
+day7pt2 :: [Bag] -> Int
+day7pt2 ls = countBags "shiny gold" ls - 1
   where
     countBags c xs = 1 + n
       where
         ys = filter (\x -> colour x == c) xs
         n = if null ys then 0 else sum (map (\(a,b) -> a * countBags b xs) (contents (head ys)))
+
+day7parser :: Parser [Bag]
+day7parser = many bagParser
 
 data Bag = Bag
   { colour :: String
