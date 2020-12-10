@@ -1,8 +1,6 @@
-module Advent.ParseUtils 
-  ( parseFile
-  , process
-  ) where
+module Advent.ParseUtils where
 
+import Control.Monad (void)
 import Text.Parsec
 import Text.Parsec.String ( Parser )
 
@@ -16,3 +14,10 @@ process f d exs =
   case exs of
     (Left e) -> print e >> pure d
     (Right xs) -> pure $ f xs
+
+integer :: Parser Integer
+integer = rd <$> many1 digit
+  where rd = read :: String -> Integer
+
+eol :: Parser ()
+eol = void (char '\n') <|> eof
