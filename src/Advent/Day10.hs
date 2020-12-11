@@ -3,7 +3,9 @@ module Advent.Day10
   , day10pt2
   ) where
 
+import Control.Lens
 import Data.List (sort)
+import Data.Maybe (catMaybes)
 
 day10pt1 :: [Int] -> Int
 day10pt1 = f 0 0 1 . sort
@@ -16,7 +18,9 @@ day10pt1 = f 0 0 1 . sort
         threes' = if (x - input) == 3 then threes + 1 else threes
 
 day10pt2 :: [Int] -> Int
-day10pt2 xs = head $ foldr f [1] [0..length n-2]
+day10pt2 xs = head $ foldr f [1] [0..length ys-2]
   where
-    f i acc = sum [acc !! (j-i-1) | j <- [i+1..i+3], j < length n, (n !! j) - (n !! i) <= 3] : acc
-    n = sort (maximum xs + 3 : 0 : xs)
+    ys = sort (0 : maximum xs + 3 : xs)
+    f i a = sum (catMaybes [a ^? element (j - i - 1) | j <- [i + 1 .. i + 3], isValid (ys ^? element j) (ys ^? element i)]) : a
+    isValid (Just x) (Just y) = x - y <= 3
+    isValid _ _ = False
