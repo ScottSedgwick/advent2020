@@ -16,10 +16,12 @@ tested-with:         GHC == 8.10.1
 common common-options
   build-depends:       base ^>= 4.14.0.0
                      , cond
+                     , containers
                      , parsec
                      , mtl
                      , safe
                      , split
+                     , unix
   
   ghc-options:         -Wall
                        -Wcompat
@@ -72,6 +74,7 @@ test-suite advent-test
                      , AdventSpec.Day5
                      , AdventSpec.Day6
                      , AdventSpec.Day7
+                     , AdventSpec.Day10
   build-depends:       advent
                      , hspec
   ghc-options:         -threaded
