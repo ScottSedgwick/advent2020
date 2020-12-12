@@ -1,4 +1,13 @@
-module Advent.ParseUtils where
+module Advent.ParseUtils
+  ( eol
+  , parseFile
+  , process
+  , integer
+  , integers
+  , int
+  , ints
+  , intset
+  ) where
 
 import Control.Monad (void)
 import qualified Data.IntSet as IS

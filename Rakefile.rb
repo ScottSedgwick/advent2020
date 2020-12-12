@@ -3,7 +3,7 @@ task :build do
 end
 
 task :run do
-  sh('cabal exec advent-exe')
+  sh('cabal exec advent-exe < data/Day11Test.txt')
 end
 
 task :test do
