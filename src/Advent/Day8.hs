@@ -2,10 +2,13 @@
 module Advent.Day8
   ( day8pt1
   , day8pt2
+  , day8parser
+  , Term(..)
   ) where
 
-day8pt1 :: String -> Term
-day8pt1 = runProgram [] 0 0 . parseAll
+import Advent.ParseUtils (Parser, int)
+import Text.Megaparsec
+import Text.Megaparsec.Char
 
 data Action 
   = Acc Int 
@@ -13,23 +16,31 @@ data Action
   | Nop 
   deriving stock Show
 
+day8parser :: Parser [Action]
+day8parser = many p
+  where 
+    p = do
+      action <- chunk "acc" <|> chunk "jmp" <|> chunk "nop"
+      _      <- space
+      sign   <- chunk "+" <|> chunk "-"
+      value  <- int
+      _      <- space
+      let value' = if sign == "-" then negate value else value
+      pure $ case action of
+              "acc" -> Acc value'
+              "jmp" -> Jmp value'
+              _      -> Nop
+
 data Term 
   = NoInstructions 
   | IndexTooLow 
   | IndexTooHigh 
   | Normal Int 
   | InfiniteLoop Int 
-  deriving stock Show
+  deriving stock (Show, Eq)
 
-parse :: String -> Action
-parse ('a':'c':'c':' ':'+':xs) = Acc (read xs :: Int)
-parse ('a':'c':'c':' ':'-':xs) = Acc (-1 * read xs :: Int)
-parse ('j':'m':'p':' ':'+':xs) = Jmp (read xs :: Int)
-parse ('j':'m':'p':' ':'-':xs) = Jmp (-1 * read xs :: Int)
-parse _ = Nop
-
-parseAll :: String -> [Action]
-parseAll = map parse . lines 
+day8pt1 :: [Action] -> Term
+day8pt1 = runProgram [] 0 0 
 
 runProgram :: [Int] -> Int -> Int -> [Action] -> Term
 runProgram _ _ _ [] = NoInstructions
@@ -47,8 +58,8 @@ runProgram ds index acc xs
           Jmp x -> (i + x, a)
           Nop   -> (i + 1, a) 
 
-day8pt2 :: String -> [Term]
-day8pt2 = filter isNormal . map (runProgram [] 0 0) . flipOne 0 . map parse . lines
+day8pt2 :: [Action] -> [Term]
+day8pt2 = filter isNormal . map (runProgram [] 0 0) . flipOne 0 
 
 isNormal :: Term -> Bool
 isNormal (Normal _) = True

@@ -2,6 +2,7 @@ module Advent.ParseUtils
   ( Parser
   , digit
   , eol
+  , int
   , intline
   , letter
   , parseFile
@@ -47,6 +48,11 @@ intline = do
 
 digit :: Parser Char
 digit = satisfy isDigit <?> "digit" -- oneOf ['0'..'9'] <?> "digit"
+
+int :: Parser Int
+int = do
+  x <- some digit
+  pure (read x :: Int)
 
 letter :: Parser Char
 letter = satisfy isAlpha <?> "letter"
