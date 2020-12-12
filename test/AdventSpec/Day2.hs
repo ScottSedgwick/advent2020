@@ -1,16 +1,12 @@
 module AdventSpec.Day2 (spec) where
 
-import Text.Parsec.Error
-import Text.Parsec.Pos
 import Test.Hspec
 import Advent
 
 process' :: ([Pwd] -> IO()) -> FilePath -> IO()
 process' f fname = do 
-  epwd <- parseFile day2Parser fname
-  case epwd of
-    Left e -> e `shouldBe` newErrorUnknown (newPos "" 0 0)
-    Right ps -> f ps 
+  ps <- parseFile day2Parser [] fname
+  f ps 
 
 spec :: Spec
 spec = do

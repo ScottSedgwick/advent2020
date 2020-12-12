@@ -1,10 +1,8 @@
 module AdventSpec.Day10 where
 
 import Test.Hspec ( describe, it, shouldBe, Spec )
-import Advent 
-
-errcode :: a -> Int
-errcode = const (-1)
+import Text.Megaparsec
+import Advent
 
 testfile1 :: String
 testfile1 = "data/Day10Test1.txt"
@@ -19,26 +17,20 @@ spec :: Spec
 spec = do
   describe "day10" $ do
     it "part1 test1" $ do
-      xs <- parseFile ints testfile1
-      let x = either errcode day10pt1 xs
-      x `shouldBe` 35
+      xs <- parseFile (many intline) [] testfile1
+      day10pt1 xs `shouldBe` 35
     it "part1 test2" $ do
-      xs <- parseFile ints testfile2
-      let x = either errcode day10pt1 xs
-      x `shouldBe` 220
+      xs <- parseFile (many intline) [] testfile2
+      day10pt1 xs `shouldBe` 220
     it "part1 actual" $ do
-      xs <- parseFile ints actualfile
-      let x = either errcode day10pt1 xs 
-      x `shouldBe` 2210
+      xs <- parseFile (many intline) [] actualfile
+      day10pt1 xs `shouldBe` 2210
     it "part2 test1" $ do
-      xs <- parseFile ints testfile1
-      let x = either errcode day10pt2 xs
-      x `shouldBe` 8
+      xs <- parseFile (many intline) [] testfile1
+      day10pt2 xs `shouldBe` 8
     it "part2 test2" $ do
-      xs <- parseFile ints testfile2
-      let x = either errcode day10pt2 xs
-      x `shouldBe` 19208
+      xs <- parseFile (many intline) [] testfile2
+      day10pt2 xs `shouldBe` 19208
     it "part2 actual" $ do
-      xs <- parseFile ints actualfile
-      let x = either errcode day10pt2 xs
-      x `shouldBe` 7086739046912
+      xs <- parseFile (many intline) [] actualfile
+      day10pt2 xs `shouldBe` 7086739046912

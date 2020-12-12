@@ -5,7 +5,7 @@ module Advent.Day9
   , day9parser
   ) where
 
-import Advent.MParseUtils
+import Advent.ParseUtils
 import Data.List (inits, tails)
 import Text.Megaparsec
 

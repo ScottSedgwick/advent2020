@@ -8,7 +8,7 @@ module Advent.Day11
 
 import qualified Data.Map as M
 import Text.Megaparsec
-import Advent.MParseUtils
+import Advent.ParseUtils
 
 data Space = Empty
            | Occupied

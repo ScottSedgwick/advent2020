@@ -45,7 +45,6 @@ library
   hs-source-dirs:      src
   exposed-modules:     Advent
   other-modules:       Advent.ParseUtils
-                     , Advent.MParseUtils
                      , Advent.Day1
                      , Advent.Day2
                      , Advent.Day3

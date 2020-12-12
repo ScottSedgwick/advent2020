@@ -1,4 +1,3 @@
-{-# LANGUAGE DerivingStrategies #-}
 module Advent.Day7
   ( day7pt1
   , day7pt2
@@ -6,30 +5,34 @@ module Advent.Day7
   ) where
 
 import Control.Monad (void)
-import Data.List (nub, isInfixOf)
-import Data.List.Split (splitOn)
-import Text.Parsec
-import Text.Parsec.String ( Parser )
+import Data.List (nub)
+import Text.Megaparsec
+import Advent.ParseUtils
 
-day7pt1 :: String -> Int
-day7pt1 xs = length $ nub $ findAll ["shiny gold"] zs
-  where
-    ys = map (splitOn " bags contain ") (lines xs)
-    zs = map (\y -> (head y, head (tail y))) ys
+data Bag = Bag
+  { colour :: String
+  , contents :: [(Int, String)]
+  } deriving stock (Show, Eq)
 
-findAll :: [String] -> [(String, String)] -> [String]
+day7parser :: Parser [Bag]
+day7parser = many bagParser
+
+day7pt1 :: [Bag] -> Int
+day7pt1 xs = length $ nub $ findAll ["shiny gold"] xs
+
+findAll :: [String] -> [Bag] -> [String]
 findAll []     _  = []
 findAll (c:cs) cm = xs <> findAll (cs <> xs) cm 
   where
     xs = find c cm 
 
-find :: String -> [(String, String)] -> [String]
-find fromColor colorMap = map fst cs 
+find :: String -> [Bag] -> [String]
+find fromColor colorMap = map colour cs 
   where
     cs = filter (hasColor fromColor) colorMap
 
-hasColor :: String -> (String, String) -> Bool
-hasColor c (_, b) = c `isInfixOf` b
+hasColor :: String -> Bag -> Bool
+hasColor c b = any (\(_,c') -> c == c') (contents b)
 
 day7pt2 :: [Bag] -> Int
 day7pt2 ls = countBags "shiny gold" ls - 1
@@ -39,41 +42,28 @@ day7pt2 ls = countBags "shiny gold" ls - 1
         ys = filter (\x -> colour x == c) xs
         n = if null ys then 0 else sum (map (\(a,b) -> a * countBags b xs) (contents (head ys)))
 
-day7parser :: Parser [Bag]
-day7parser = many bagParser
-
-data Bag = Bag
-  { colour :: String
-  , contents :: [(Int, String)]
-  } deriving stock (Show, Eq)
-
 bagParser :: Parser Bag
 bagParser = do
-  c1 <- many1 letter
+  c1 <- some letter
   void $ space
-  c2 <- many1 letter
-  void $ string " bags contain "
-  cs <- many contentParser
-  void $ newline
+  c2 <- some letter
+  void $ chunk " bags contain "
+  cs <- many cp1
+  void $ optional (chunk "no other bags.")
+  void $ eol
   pure $ Bag 
     { colour = c1 <> " " <> c2
     , contents = cs
     }
   where
-    contentParser = cp1 <|> cp2
     cp1 = do
-      n <- many1 digit
+      n <- some digit
       void $ space
-      c1 <- many1 letter
+      c1 <- some letter
       void $ space
-      c2 <- many1 letter
-      void $ string " bag"
-      void $ string ", " <|> string "." <|> skipEnd
+      c2 <- some letter
+      void $ chunk " bag"
+      void $ optional (single 's')
+      void $ chunk ", " <|> chunk "."
       pure (read n :: Int, c1 <> " " <> c2)
-    cp2 = do
-      void $ string "no other bags."
-      pure (0, "")
-    skipEnd = do
-      void $ char 's'
-      string ", " <|> string "."
     

@@ -10,8 +10,8 @@ module Advent.Day2
 
 import Data.Algebra.Boolean ( xor )
 import Safe ( headMay )
-import Text.Parsec ( char, digit, letter, newline, space, many ) 
-import Text.Parsec.String ( Parser )
+import Text.Megaparsec
+import Advent.ParseUtils
 
 data Pwd = Pwd
   { minC :: Int
@@ -25,15 +25,15 @@ day2Parser = many pwdParser
 
 pwdParser :: Parser Pwd
 pwdParser = do
-  minc <- many digit
-  _ <- char '-'
-  maxc <- many digit
+  minc <- some digit
+  _ <- chunk "-"
+  maxc <- some digit
   _ <- space
   c <- letter
-  _ <- char ':'
+  _ <- chunk ":"
   _ <- space
   p <- many letter
-  _ <- newline
+  _ <- eol
   pure $ Pwd 
     { minC = read minc :: Int
     , maxC = read maxc :: Int

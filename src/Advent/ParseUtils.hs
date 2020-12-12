@@ -1,58 +1,55 @@
-module Advent.ParseUtils
-  ( eol
+module Advent.ParseUtils 
+  ( Parser
+  , digit
+  , eol
+  , intline
+  , letter
   , parseFile
-  , process
-  , integer
-  , integers
-  , int
-  , ints
-  , intset
+  , parseMap
+  , space
   ) where
 
-import Control.Monad (void)
-import qualified Data.IntSet as IS
-import Text.Parsec
-import Text.Parsec.String ( Parser )
+import Data.Char (isAlpha, isDigit, isSpace)
+import Data.Void
+import qualified Data.Map as M
+import Text.Megaparsec
 
-parseFile :: Parser  a -> FilePath -> IO (Either ParseError a)
-parseFile p fname = do
-  input <- readFile fname
-  return (parse p "" input)
+type Parser = Parsec Void String
 
-process :: (a -> b) -> b -> Either ParseError a -> IO b
-process f d exs =
-  case exs of
-    (Left e) -> print e >> pure d
-    (Right xs) -> pure $ f xs
+parseFile :: Parser a -> a -> FilePath -> IO a
+parseFile p d f = do
+  xs <- readFile f 
+  case parse p f xs of
+    (Left e)   -> print e >> pure d
+    (Right ys) -> pure ys
+
+parseMap :: Parser a -> Parser (M.Map (Int, Int) a)
+parseMap p = some (lineParser p) >>= pure . M.fromList . concat
+
+lineParser :: Parser a -> Parser [((Int, Int), a)]
+lineParser p = some (locnParser p) >>= \xs -> eol <|> eof >> pure xs
+
+locnParser :: Parser a -> Parser ((Int, Int), a)
+locnParser p = do
+  c <- p
+  pos <- getSourcePos
+  pure ((unPos (sourceColumn pos), unPos (sourceLine pos)), c)
 
 eol :: Parser ()
-eol = void (char '\n') <|> eof
+eol = chunk "\n" >> pure ()
 
-integer :: Parser Integer
-integer = rd <$> many1 digit
-  where rd = read :: String -> Integer
+intline :: Parser Int
+intline = do
+  x <- some digit                  -- consume the digits we actually want
+  _ <- many (oneOf [' ', '\t'])    -- consume any trailing spaces
+  _ <- eol <|> eof                 -- consume the end-of-line character, or end-of-file
+  pure (read x :: Int)             -- return the number we want, converted to an Int
 
-integers :: Parser [Integer]
-integers = many f
-  where
-    f = do
-      x <- integer
-      eol
-      pure x
+digit :: Parser Char
+digit = satisfy isDigit <?> "digit" -- oneOf ['0'..'9'] <?> "digit"
 
-int :: Parser Int
-int = rd <$> many1 digit
-  where rd = read :: String -> Int
+letter :: Parser Char
+letter = satisfy isAlpha <?> "letter"
 
-ints :: Parser [Int]
-ints = many f
-  where
-    f = do
-      x <- int
-      eol
-      pure x
-
-intset :: Parser IS.IntSet
-intset = do
-  xs <- ints
-  pure (IS.fromList xs)
+space :: Parser Char
+space = satisfy isSpace <?> "space"
