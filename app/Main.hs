@@ -4,5 +4,5 @@ import Advent
 
 main :: IO ()
 main = do
-  r <- day11parser "data/Day11Actual.txt"
-  print $ day11pt2 r
+  r <- day12parser "data/Day12Actual.txt"
+  print $ day12pt1 r
