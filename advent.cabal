@@ -82,6 +82,7 @@ test-suite advent-test
                      , AdventSpec.Day5
                      , AdventSpec.Day6
                      , AdventSpec.Day7
+                     , AdventSpec.Day9
                      , AdventSpec.Day10
                      , AdventSpec.Day11
                      , AdventSpec.Day12

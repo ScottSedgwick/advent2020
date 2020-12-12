@@ -1,5 +1,7 @@
 module Advent.MParseUtils 
   ( Parser
+  , digit
+  , intline
   , parseFile
   , parseMap
   ) where
@@ -11,7 +13,11 @@ import Text.Megaparsec
 type Parser = Parsec Void String
 
 parseFile :: Parser a -> a -> FilePath -> IO a
-parseFile p d f = readFile f >>= either (\e -> print e >> pure d) pure . parse p f
+parseFile p d f = do
+  xs <- readFile f 
+  case parse p f xs of
+    (Left e)   -> print e >> pure d
+    (Right ys) -> pure ys
 
 parseMap :: Parser a -> Parser (M.Map (Int, Int) a)
 parseMap p = some (lineParser p) >>= pure . M.fromList . concat
@@ -27,3 +33,13 @@ locnParser p = do
 
 eol :: Parser ()
 eol = chunk "\n" >> pure ()
+
+intline :: Parser Int
+intline = do
+  x <- some digit                  -- consume the digits we actually want
+  _ <- many (oneOf [' ', '\t'])    -- consume any trailing spaces
+  _ <- eol <|> eof                 -- consume the end-of-line character, or end-of-file
+  pure (read x :: Int)             -- return the number we want, converted to an Int
+
+digit :: Parser Char
+digit = oneOf ['0'..'9'] <?> "digit"
