@@ -3,6 +3,7 @@ module Advent.ParseUtils
   , digit
   , eol
   , int
+  , integer
   , intline
   , letter
   , parseFile
@@ -17,11 +18,11 @@ import Text.Megaparsec
 
 type Parser = Parsec Void String
 
-parseFile :: Parser a -> a -> FilePath -> IO a
-parseFile p d f = do
+parseFile :: Monoid a => Parser a -> FilePath -> IO a
+parseFile p f = do
   xs <- readFile f 
   case parse p f xs of
-    (Left e)   -> print e >> pure d
+    (Left e)   -> print e >> pure mempty
     (Right ys) -> pure ys
 
 parseMap :: Parser a -> Parser (M.Map (Int, Int) a)
@@ -53,6 +54,11 @@ int :: Parser Int
 int = do
   x <- some digit
   pure (read x :: Int)
+
+integer :: Parser Integer
+integer = do
+  x <- some digit
+  pure (read x :: Integer)
 
 letter :: Parser Char
 letter = satisfy isAlpha <?> "letter"

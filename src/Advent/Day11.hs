@@ -37,7 +37,7 @@ spaceParser = do
 type Room = M.Map (Int, Int) Space
 
 day11parser :: FilePath -> IO Room
-day11parser f = parseFile (parseMap spaceParser) M.empty f
+day11parser f = parseFile (parseMap spaceParser) f
 
 day11pt1 :: Room -> Int
 day11pt1 r0 = countOccupied r

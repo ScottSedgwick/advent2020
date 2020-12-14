@@ -5,7 +5,7 @@ import Advent
 
 process' :: ([Pwd] -> IO()) -> FilePath -> IO()
 process' f fname = do 
-  ps <- parseFile day2Parser [] fname
+  ps <- parseFile day2Parser fname
   f ps 
 
 spec :: Spec

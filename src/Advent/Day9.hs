@@ -32,5 +32,5 @@ day9pt2 x xs = head ys + last ys
     ys = head $ filter (\zs -> sum zs == x) $ concatMap tails $ inits xs
 
 day9parser :: FilePath -> IO [Int]
-day9parser f = parseFile (some intline) [] f
+day9parser f = parseFile (some intline) f
 
