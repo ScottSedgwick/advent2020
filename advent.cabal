@@ -59,6 +59,7 @@ library
                      , Advent.Day12
                      , Advent.Day13
                      , Advent.Day14
+                     , Advent.Day15
   ghc-options:         -Wmissing-export-lists
 
 executable advent-exe
@@ -90,6 +91,7 @@ test-suite advent-test
                      , AdventSpec.Day12
                      , AdventSpec.Day13
                      , AdventSpec.Day14
+                     , AdventSpec.Day15
   build-depends:       advent
                      , hspec
   ghc-options:         -threaded
