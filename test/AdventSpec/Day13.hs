@@ -19,13 +19,13 @@ spec = do
       xs <- parseFile day13parser actualfile
       day13pt1 xs `shouldBe` 171
     it "crt test 1" $ do
-      crt [(2,7), (0,3), (1,5)] `shouldBe` (51,105)
+      crt ([(2,7), (0,3), (1,5)] :: [(Integer, Integer)]) `shouldBe` ((51,105) :: (Integer, Integer))
     it "crt test 2" $ do
-      crt [(2,3), (3,4), (1,5)] `shouldBe` (11,60)
+      crt ([(2,3), (3,4), (1,5)] :: [(Integer, Integer)]) `shouldBe` ((11,60) :: (Integer, Integer))
     it "crt test 3" $ do
-      crt [(0,7), ((-1),13), ((-4),59), ((-6),31), ((-7),19)] `shouldBe` (1068781,3162341)
+      crt ([(0,7), ((-1),13), ((-4),59), ((-6),31), ((-7),19)] :: [(Integer, Integer)]) `shouldBe` ((1068781,3162341) :: (Integer, Integer))
     it "crt test 4" $ do
-      crt [(0,17), ((-2),13), ((-3),19)] `shouldBe` (3417,4199)
+      crt ([(0,17), ((-2),13), ((-3),19)] :: [(Integer, Integer)]) `shouldBe` ((3417,4199) :: (Integer, Integer))
     it "part2 test1" $ do
       xs <- parseFile day13parser testfile
       day13pt2 xs `shouldBe` 1068781

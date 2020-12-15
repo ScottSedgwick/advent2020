@@ -1,5 +1,5 @@
 import Test.Hspec
--- import qualified AdventSpec.Day1 as D
+import qualified AdventSpec.Day1 as D
 -- import qualified AdventSpec.Day2 as D
 -- import qualified AdventSpec.Day3 as D
 -- import qualified AdventSpec.Day4 as D
@@ -11,7 +11,7 @@ import Test.Hspec
 -- import qualified AdventSpec.Day10 as D
 -- import qualified AdventSpec.Day11 as D
 -- import qualified AdventSpec.Day12 as D
-import qualified AdventSpec.Day13 as D
+-- import qualified AdventSpec.Day13 as D
 -- import qualified AdventSpec.Day14 as D
 
 main :: IO ()
