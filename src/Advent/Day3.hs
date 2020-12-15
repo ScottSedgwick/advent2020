@@ -1,18 +1,26 @@
 module Advent.Day3
-  ( day3loader
+  ( day3parser
   , day3pt1
   , day3pt2
   ) where
 
-day3loader :: FilePath -> IO [[Int]]
-day3loader fpath = do
-  xs <- readFile fpath
-  let ys = lines xs
-  pure $ map f ys
-  where
-    f cs = map g cs
-    g '#' = 1
-    g _   = 0
+import Advent.ParseUtils
+import Text.Megaparsec
+import Text.Megaparsec.Char
+
+day3parser :: Parser [[Int]]
+day3parser = some p1
+
+p1 :: Parser [Int]
+p1 = do
+  xs <- some p2
+  _ <- eol
+  pure xs
+
+p2 :: Parser Int
+p2 = do
+  c <- char '#' <|> char '.'
+  pure $ if c == '#' then 1 else 0
 
 runSlope :: [[Int]] -> (Int, Int) -> Int
 runSlope xs (dx, dy) = f 0 0

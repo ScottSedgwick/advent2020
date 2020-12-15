@@ -4,6 +4,6 @@ import Advent
 
 main :: IO ()
 main = do
-  d <- parseFile day1parser "data/Day1Test.txt"
-  print $ day1pt2 d
+  d <- parseFile day3parser "data/Day3Test.txt"
+  print $ day3pt1 d
 

@@ -11,6 +11,7 @@ module Advent.Day2
 import Data.Algebra.Boolean ( xor )
 import Safe ( headMay )
 import Text.Megaparsec
+import Text.Megaparsec.Char
 import Advent.ParseUtils
 
 data Pwd = Pwd

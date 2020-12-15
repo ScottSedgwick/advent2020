@@ -1,20 +1,19 @@
 module Advent.ParseUtils 
   ( Parser
   , digit
-  , eol
   , int
   , integer
   , intline
   , letter
   , parseFile
   , parseMap
-  , space
   ) where
 
-import Data.Char (isAlpha, isDigit, isSpace)
+import Data.Char (isAlpha, isDigit)
 import Data.Void
 import qualified Data.Map as M
 import Text.Megaparsec
+import Text.Megaparsec.Char
 
 type Parser = Parsec Void String
 
@@ -29,7 +28,7 @@ parseMap :: Parser a -> Parser (M.Map (Int, Int) a)
 parseMap p = some (lineParser p) >>= pure . M.fromList . concat
 
 lineParser :: Parser a -> Parser [((Int, Int), a)]
-lineParser p = some (locnParser p) >>= \xs -> eol <|> eof >> pure xs
+lineParser p = some (locnParser p) >>= \xs -> eolv <|> eof >> pure xs
 
 locnParser :: Parser a -> Parser ((Int, Int), a)
 locnParser p = do
@@ -37,15 +36,17 @@ locnParser p = do
   pos <- getSourcePos
   pure ((unPos (sourceColumn pos), unPos (sourceLine pos)), c)
 
-eol :: Parser ()
-eol = chunk "\n" >> pure ()
-
 intline :: Parser Int
 intline = do
   x <- some digit                  -- consume the digits we actually want
   _ <- many (oneOf [' ', '\t'])    -- consume any trailing spaces
-  _ <- eol <|> eof                 -- consume the end-of-line character, or end-of-file
+  _ <- eolv <|> eof                -- consume the end-of-line character, or end-of-file
   pure (read x :: Int)             -- return the number we want, converted to an Int
+
+eolv :: Parser ()
+eolv = do
+  _ <- eol
+  pure ()
 
 digit :: Parser Char
 digit = satisfy isDigit <?> "digit" -- oneOf ['0'..'9'] <?> "digit"
@@ -62,6 +63,3 @@ integer = do
 
 letter :: Parser Char
 letter = satisfy isAlpha <?> "letter"
-
-space :: Parser Char
-space = satisfy isSpace <?> "space"

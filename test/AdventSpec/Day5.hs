@@ -7,10 +7,8 @@ spec :: Spec
 spec = do
   describe "part1" $ do
     it "part1" $ do
-      xs <- readFile "data/Day5Actual.txt"
-      let ys = day5pt1 xs
-      head ys `shouldBe` 922
+      xs <- parseFile day5parser "data/Day5Actual.txt"
+      day5pt1 xs `shouldBe` 922
     it "part2" $ do
-      xs <- readFile "data/Day5Actual.txt"
-      let ys = day5pt2 xs
-      ys `shouldBe` 747
+      xs <- parseFile day5parser "data/Day5Actual.txt"
+      day5pt2 xs `shouldBe` 747

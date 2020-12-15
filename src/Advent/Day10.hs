@@ -1,11 +1,17 @@
 module Advent.Day10
   ( day10pt1
   , day10pt2
+  , day10parser
   ) where
 
 import Control.Lens
 import Data.List (sort)
 import Data.Maybe (catMaybes)
+import Advent.ParseUtils
+import Text.Megaparsec
+
+day10parser :: Parser [Int]
+day10parser = some intline
 
 day10pt1 :: [Int] -> Int
 day10pt1 = f 0 0 1 . sort

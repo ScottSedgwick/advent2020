@@ -1,28 +1,41 @@
 module Advent.Day5
   ( day5pt1
   , day5pt2
-  , seatFrom
+  , day5parser
   ) where
 
 import Data.Char (digitToInt)
 import Data.List (foldl', sort)
+import Advent.ParseUtils
+import Text.Megaparsec
+import Text.Megaparsec.Char
 
-day5pt1 :: String -> [Int]
-day5pt1 xs = reverse $ sort $ map seatFrom (lines xs)
+data Seat = Seat
+  { row :: Int
+  , col :: Int
+  } deriving stock (Eq, Show)
 
-seatFrom :: String -> Int
-seatFrom xs = binToDec (replace 'F' '0' $ replace 'B' '1' $ take 7 xs) * 8 + binToDec (replace 'R' '1' $ replace 'L' '0' $ drop 7 xs)
+day5parser :: Parser [Int]
+day5parser = some seatParser
 
-binToDec :: String -> Int
-binToDec = foldl' (\acc x -> acc * 2 + digitToInt x) 0
+seatParser :: Parser Int
+seatParser = do
+  rs <- some (char 'F' <|> char 'B')
+  cs <- some (char 'R' <|> char 'L')
+  _ <- eol
+  let a = binToDec $ map (\c -> if c == 'B' then '1' else '0') rs
+  let b = binToDec $ map (\c -> if c == 'R' then '1' else '0') cs
+  pure $ a * 8 + b
+  where
+    binToDec = foldl' (\acc x -> acc * 2 + digitToInt x) 0
 
-replace :: Eq a => a -> a -> [a] -> [a]
-replace a b = map (\x -> if x == a then b else x)
+day5pt1 :: [Int] -> Int
+day5pt1 xs = head $ reverse $ sort xs
 
-day5pt2 :: String -> Int
+day5pt2 :: [Int] -> Int
 day5pt2 xs = findGap ys (tail ys)
   where
-    ys = day5pt1 xs
+    ys = reverse $ sort xs
 
 findGap :: [Int] -> [Int] -> Int
 findGap (x:xs) (y:ys) = 

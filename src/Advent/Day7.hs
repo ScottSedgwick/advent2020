@@ -7,6 +7,7 @@ module Advent.Day7
 import Control.Monad (void)
 import Data.List (nub)
 import Text.Megaparsec
+import Text.Megaparsec.Char
 import Advent.ParseUtils
 
 data Bag = Bag
