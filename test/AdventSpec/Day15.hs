@@ -5,7 +5,7 @@ import Advent
 
 spec :: Spec
 spec = do
-  describe "day14" $ do
+  describe "day15" $ do
     it "part1 test1" $ do
       day15pt1 day15test `shouldBe` 436
     it "part1 actual" $ do
