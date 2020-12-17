@@ -11,10 +11,10 @@ copyright:           2020 Scott Sedgwick
 build-type:          Simple
 extra-doc-files:     README.md
                      CHANGELOG.md
-tested-with:         GHC == 8.10.1
+tested-with:         GHC == 8.8.4
 
 common common-options
-  build-depends:       base ^>= 4.14.0.0
+  build-depends:       base ^>= 4.13.0.0
                      , cond
                      , containers
                      , lens
@@ -60,6 +60,7 @@ library
                      , Advent.Day13
                      , Advent.Day14
                      , Advent.Day15
+                     , Advent.Day17
   ghc-options:         -Wmissing-export-lists
 
 executable advent-exe
@@ -92,6 +93,7 @@ test-suite advent-test
                      , AdventSpec.Day13
                      , AdventSpec.Day14
                      , AdventSpec.Day15
+                     , AdventSpec.Day17
   build-depends:       advent
                      , hspec
   ghc-options:         -threaded

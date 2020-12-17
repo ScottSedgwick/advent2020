@@ -15,6 +15,7 @@ module Advent
   , module Advent.Day13
   , module Advent.Day14
   , module Advent.Day15
+  , module Advent.Day17
   ) where
 
 import Advent.ParseUtils
@@ -33,3 +34,4 @@ import Advent.Day12
 import Advent.Day13
 import Advent.Day14
 import Advent.Day15
+import Advent.Day17

@@ -34,7 +34,7 @@ locnParser :: Parser a -> Parser ((Int, Int), a)
 locnParser p = do
   c <- p
   pos <- getSourcePos
-  pure ((unPos (sourceColumn pos), unPos (sourceLine pos)), c)
+  pure ((unPos (sourceLine pos), unPos (sourceColumn pos)), c)
 
 intline :: Parser Int
 intline = do

@@ -1,0 +1,10 @@
+cradle:
+  cabal:
+    - path: "src"
+      component: "lib:advent"
+
+    - path: "app/Main.hs"
+      component: "advent:exe:advent-exe"
+
+    - path: "test"
+      component: "advent:test:advent-test"

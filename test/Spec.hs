@@ -13,7 +13,8 @@ import Test.Hspec
 -- import qualified AdventSpec.Day12 as D
 -- import qualified AdventSpec.Day13 as D
 -- import qualified AdventSpec.Day14 as D
-import qualified AdventSpec.Day15 as D
+-- import qualified AdventSpec.Day15 as D
+import qualified AdventSpec.Day17 as D
 
 main :: IO ()
 main = hspec $ D.spec
