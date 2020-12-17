@@ -20,7 +20,7 @@ spec = do
       day8pt1 xs `shouldBe` InfiniteLoop 1087
     it "part2 test1" $ do
       xs <- parseFile day8parser testfile
-      day8pt2 xs `shouldBe` [Normal 8]
+      day8pt2 xs `shouldBe` Normal 8
     it "part2 actual" $ do
       xs <- parseFile day8parser actualfile
-      day8pt2 xs `shouldBe` [Normal 780]
+      day8pt2 xs `shouldBe` Normal 780
