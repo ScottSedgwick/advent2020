@@ -14,22 +14,21 @@ data Node = Val Integer | Sum Node Node | Pro Node Node deriving stock (Eq, Show
 instance Default Node where
   def = Val 0
 
-expr1 :: Parser Node
-expr1 = makeExprParser (parens expr1 <|> (Val <$> integer)) [[InfixL (Sum <$ symbol "+"), InfixL (Pro <$ symbol "*")]]
-
-expr2 :: Parser Node
-expr2 = makeExprParser (parens expr2 <|> (Val <$> integer)) [[InfixL (Sum <$ symbol "+")], [InfixL (Pro <$ symbol "*")]]
+type Table = [[Operator Parser Node]]
 
 eval :: Node -> Integer
 eval (Val x) = x
 eval (Sum a b) = eval a + eval b
 eval (Pro a b) = eval a * eval b
 
-execute :: Parser Node -> [String] -> Integer
-execute f = sum . map (eval . parseString f)
+execute :: Table -> [String] -> Integer
+execute t = sum . map (eval . parseString expr)
+  where
+    expr = makeExprParser (term expr) t
+    term f = parens f <|> (Val <$> integer)
 
 day18pt1 :: [String] -> Integer
-day18pt1 = execute expr1
+day18pt1 = execute [[InfixL (Sum <$ symbol "+"), InfixL (Pro <$ symbol "*")]]
 
 day18pt2 :: [String] -> Integer
-day18pt2 = execute expr2
+day18pt2 = execute [[InfixL (Sum <$ symbol "+")], [InfixL (Pro <$ symbol "*")]]
