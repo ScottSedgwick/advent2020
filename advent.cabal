@@ -17,10 +17,12 @@ common common-options
   build-depends:       base ^>= 4.13.0.0
                      , cond
                      , containers
+                     , data-default
                      , lens
                      , megaparsec
                      , mtl
                      , parsec
+                     , parser-combinators
                      , safe
                      , split
                      , unix
@@ -61,6 +63,7 @@ library
                      , Advent.Day14
                      , Advent.Day15
                      , Advent.Day17
+                     , Advent.Day18
   ghc-options:         -Wmissing-export-lists
 
 executable advent-exe
@@ -94,8 +97,12 @@ test-suite advent-test
                      , AdventSpec.Day14
                      , AdventSpec.Day15
                      , AdventSpec.Day17
+                     , AdventSpec.Day18
   build-depends:       advent
                      , hspec
+                     , hspec-megaparsec
+                     , megaparsec-tests
+                     , QuickCheck
   ghc-options:         -threaded
                        -rtsopts
                        -with-rtsopts=-N

@@ -6,12 +6,13 @@ module Advent.Day14
 
 import Data.Map (Map)
 import qualified Data.Map as M
-import Data.Int
-import Data.Bits
+import Data.Int ( Int64 )
+import Data.Bits ( Bits(clearBit, setBit) )
+import Data.Default ( Default(..) )
 import Data.List (foldl')
-import Advent.ParseUtils
-import Text.Megaparsec
-import Text.Megaparsec.Char
+import Advent.ParseUtils ( Parser )
+import Text.Megaparsec ( chunk, many, some )
+import Text.Megaparsec.Char ( alphaNumChar, digitChar, newline )
 
 data Program = Program 
   { mask :: [(Int, Char)]
@@ -23,14 +24,8 @@ data Docker = Docker
   , progs :: [Program]
   } deriving stock Show
 
-instance Semigroup Docker where
-  (<>) a b = Docker
-    { locn = locn a <> locn b
-    , progs = progs a <> progs b
-    }
-
-instance Monoid Docker where
-  mempty = Docker
+instance Default Docker where
+  def = Docker
     { locn = M.empty
     , progs = []
     }

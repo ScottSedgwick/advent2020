@@ -6,10 +6,11 @@ module Advent.Day13
   )
 where
 
-import Advent.ParseUtils
+import Advent.ParseUtils ( digit, integer, Parser )
 import Data.Bifunctor (first)
+import Data.Default ( Default(..) )
 import Data.List (sortOn)
-import Text.Megaparsec
+import Text.Megaparsec ( (<|>), chunk, many, some )
 
 data BusSched = BusSched
   { departTime :: Integer,
@@ -17,15 +18,8 @@ data BusSched = BusSched
   }
   deriving stock (Show, Eq)
 
-instance Semigroup BusSched where
-  (<>) a b =
-    BusSched
-      { departTime = departTime a + departTime b,
-        buses = buses a <> buses b
-      }
-
-instance Monoid BusSched where
-  mempty =
+instance Default BusSched where
+  def =
     BusSched
       { departTime = 0,
         buses = []

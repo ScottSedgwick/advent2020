@@ -5,27 +5,52 @@ module Advent.ParseUtils
   , integer
   , intline
   , letter
+  , lexeme
+  , parens
   , parseFile
   , parseMap
+  , parseString
+  , symbol
   ) where
 
 import Data.Char (isAlpha, isDigit)
-import Data.Void
+import Data.Default (Default, def)
+import Data.Functor ((<&>))
+import Data.Void ( Void )
 import qualified Data.Map as M
 import Text.Megaparsec
-import Text.Megaparsec.Char
+    ( (<|>),
+      Parsec,
+      (<?>),
+      getSourcePos,
+      oneOf,
+      parse,
+      satisfy,
+      unPos,
+      between,
+      many,
+      some,
+      MonadParsec(hidden, eof),
+      SourcePos(sourceLine, sourceColumn) )
+import Text.Megaparsec.Char ( digitChar, eol, space, string )
 
 type Parser = Parsec Void String
 
-parseFile :: Monoid a => Parser a -> FilePath -> IO a
+parseFile :: Default a => Parser a -> FilePath -> IO a
 parseFile p f = do
   xs <- readFile f 
   case parse p f xs of
-    (Left e)   -> print e >> pure mempty
+    (Left e)   -> print e >> pure def
     (Right ys) -> pure ys
 
+parseString :: Default a => Parser a -> String -> a
+parseString p xs = 
+  case parse p "" xs of
+    (Left _)   -> def
+    (Right ys) -> ys
+
 parseMap :: Parser a -> Parser (M.Map (Int, Int) a)
-parseMap p = some (lineParser p) >>= pure . M.fromList . concat
+parseMap p = some (lineParser p) <&> M.fromList . concat
 
 lineParser :: Parser a -> Parser [((Int, Int), a)]
 lineParser p = some (locnParser p) >>= \xs -> eolv <|> eof >> pure xs
@@ -49,17 +74,24 @@ eolv = do
   pure ()
 
 digit :: Parser Char
-digit = satisfy isDigit <?> "digit" -- oneOf ['0'..'9'] <?> "digit"
+digit = satisfy isDigit <?> "digit"
 
 int :: Parser Int
 int = do
   x <- some digit
   pure (read x :: Int)
 
+lexeme :: Parser a -> Parser a
+lexeme p = p <* hidden space
+
 integer :: Parser Integer
-integer = do
-  x <- some digit
-  pure (read x :: Integer)
+integer = lexeme (read <$> some digitChar <?> "integer")
+
+symbol :: String -> Parser String
+symbol = lexeme . string
+
+parens :: Parser a -> Parser a
+parens = between (symbol "(") (symbol ")")
 
 letter :: Parser Char
 letter = satisfy isAlpha <?> "letter"
